@@ -1,0 +1,372 @@
+<style>
+    /* Import Figtree font */
+    @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&display=swap');
+
+    .generator-container {
+        max-width: 650px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #760029;
+        border-radius: 8px;
+        font-family: 'Figtree', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        color: #414042;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .generator-container h3 {
+        color: #414042;
+        margin-top: 0;
+        margin-bottom: 5px;
+    }
+    .generator-container .last-updated {
+        font-size: 0.85em;
+        color: #760029;
+        background-color: #f8e6eb;
+        padding: 4px 8px;
+        border-radius: 4px;
+        display: inline-block;
+        margin-bottom: 15px;
+        border: 1px solid #e1bac5;
+        font-weight: 600;
+    }
+    .generator-container .subtitle {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 15px;
+    }
+    
+    /* Layout formatting for 2 columns in the UI */
+    .video-inputs-wrapper {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+    .video-input-col {
+        flex: 1;
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 6px;
+        border: 1px solid #eef0f2;
+    }
+    .video-input-col h4 {
+        margin-top: 0;
+        color: #760029;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 5px;
+    }
+
+    .generator-container label {
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+        font-size: 0.9em;
+    }
+    .generator-container input[type="text"],
+    .generator-container textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-family: inherit;
+        font-size: 0.9em;
+        color: inherit;
+    }
+    .generator-container textarea {
+        font-family: monospace;
+        background-color: #fafafa;
+    }
+    
+    .generator-container .radio-group {
+        display: flex;
+        gap: 20px;
+        margin: 15px 0;
+        background: #f8e6eb;
+        padding: 10px 15px;
+        border-radius: 4px;
+        border: 1px solid #e1bac5;
+    }
+    .generator-container .radio-option {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        margin-top: 0;
+        color: #760029;
+    }
+    .generator-container .radio-option input {
+        cursor: pointer;
+        margin: 0;
+    }
+
+    .generator-container .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .generator-container button {
+        background-color: #760029;
+        color: white;
+        padding: 12px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1em;
+        font-family: inherit;
+        font-weight: 600;
+        transition: background-color 0.2s ease;
+        flex-grow: 1;
+    }
+    .generator-container button:hover {
+        background-color: #52001D;
+    }
+    
+    #resetButton {
+        background-color: #A9A9A9;
+    }
+    #resetButton:hover {
+        background-color: #808080;
+    }
+
+    #outputCode {
+        background-color: #f4f4f4;
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-top: 5px;
+        white-space: pre-wrap;
+        word-break: break-all;
+        min-height: 60px;
+        font-family: monospace;
+        font-size: 0.9em;
+        color: #333;
+        border-radius: 4px;
+    }
+    #copyButton {
+        padding: 10px 12px;
+        font-size: 0.95em;
+        margin-top: 10px;
+        background-color: #760029; 
+        transition: background-color 0.2s ease;
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    #copyButton:hover {
+        background-color: #52001D;
+    }
+    .error-text {
+        color: #d9534f;
+        font-weight: bold;
+    }
+</style>
+
+<div class="generator-container">
+    <h3>Side-by-Side Canvas Video Generator</h3>
+    <div class="last-updated">Last updated: 20 May 2026 by Hollie Herne</div>
+    <div class="subtitle">Generate sanitizer-proof side-by-side (2-column) video layouts for Canvas.</div>
+
+    <div class="radio-group">
+        <span style="font-weight: bold; color: #760029; margin-right: 10px;">Media Type:</span>
+        <label class="radio-option">
+            <input type="radio" name="mediaType" value="echo" checked onchange="toggleMediaType()"> Echo360 LTI
+        </label>
+        <label class="radio-option">
+            <input type="radio" name="mediaType" value="youtube" onchange="toggleMediaType()"> YouTube
+        </label>
+    </div>
+
+    <div class="video-inputs-wrapper">
+        <div class="video-input-col">
+            <h4>Video 1 (Left)</h4>
+            <label for="v1Title">Video title:</label>
+            <input type="text" id="v1Title" placeholder="e.g., Part 1 Intro">
+
+            <label for="v1Source">Source:</label>
+            <input type="text" id="v1Source" value="UC">
+
+            <label for="v1Year">Year:</label>
+            <input type="text" id="v1Year" value="2026">
+
+            <label class="inputCodeLabel" for="v1Embed">Embed snippet / URL:</label>
+            <textarea id="v1Embed" rows="3" placeholder='<p><iframe class="lti-embed" src="..."></iframe></p>'></textarea>
+        </div>
+
+        <div class="video-input-col">
+            <h4>Video 2 (Right)</h4>
+            <label for="v2Title">Video title:</label>
+            <input type="text" id="v2Title" placeholder="e.g., Part 2 Deep Dive">
+
+            <label for="v2Source">Source:</label>
+            <input type="text" id="v2Source" value="UC">
+
+            <label for="v2Year">Year:</label>
+            <input type="text" id="v2Year" value="2026">
+
+            <label class="inputCodeLabel" for="v2Embed">Embed snippet / URL:</label>
+            <textarea id="v2Embed" rows="3" placeholder='<p><iframe class="lti-embed" src="..."></iframe></p>'></textarea>
+        </div>
+    </div>
+
+    <div class="button-group">
+        <button onclick="generateSideBySide()">Generate Side-by-Side Code</button>
+        <button id="resetButton" onclick="resetGenerator()">Reset</button>
+    </div>
+
+    <label for="outputCode">Generated code (copy and paste into Canvas HTML editor):</label>
+    <div id="outputCode"></div>
+    <button id="copyButton" onclick="copyCode()" style="display: none;">Copy code to clipboard</button>
+</div>
+
+<script>
+    function toggleMediaType() {
+        const isEcho = document.querySelector('input[name="mediaType"]:checked').value === 'echo';
+        const labels = document.querySelectorAll('.inputCodeLabel');
+        const embeds = [document.getElementById('v1Embed'), document.getElementById('v2Embed')];
+        const sources = [document.getElementById('v1Source'), document.getElementById('v2Source')];
+        const years = [document.getElementById('v1Year'), document.getElementById('v2Year')];
+
+        labels.forEach(l => l.textContent = isEcho ? "Echo LTI iframe code:" : "YouTube URL:");
+        embeds.forEach(e => e.placeholder = isEcho ? '<p><iframe class="lti-embed" src="..."></iframe></p>' : 'https://www.youtube.com/watch?v=...');
+        
+        if(!isEcho) {
+            sources.forEach(s => { s.value = ""; s.placeholder = "e.g., Channel Name"; });
+            years.forEach(y => { y.value = ""; y.placeholder = "e.g., 2024"; });
+        } else {
+            sources.forEach(s => { s.value = "UC"; s.placeholder = "e.g., UC"; });
+            years.forEach(y => { y.value = "2026"; y.placeholder = "e.g., 2026"; });
+        }
+    }
+
+    function processInput(inputString, mediaType) {
+        if (mediaType === 'echo') {
+            const match = inputString.match(/src=["'](.*?)["']/i);
+            if (!match) return null;
+            if (match[1].includes('public')) return "public_error";
+            return { src: match[1], permalink: match[1] };
+        } else {
+            const match = inputString.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+            if (!match) return null;
+            return { 
+                src: `https://www.youtube.com/embed/${match[1]}`, 
+                permalink: `https://www.youtube.com/watch?v=${match[1]}` 
+            };
+        }
+    }
+
+    function buildVideoBlock(title, source, year, linkData, mediaType) {
+        let aspectRatio = mediaType === 'youtube' ? "16 / 9" : "1.1895"; // 1.1895 accommodates Echo's old 84.065% padding
+        let iframeClass = mediaType === 'youtube' ? "video-embed" : "lti-embed";
+        let ariaLabel = mediaType === 'youtube' ? "YouTube video player" : "Echo video player";
+        let iframeTitle = mediaType === 'youtube' ? `YouTube video: ${title}` : `Echo video: ${title}`;
+        let iframeAllow = mediaType === 'youtube' 
+            ? "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" 
+            : "autoplay; encrypted-media; picture-in-picture; fullscreen";
+
+        return `
+    <div style="flex: 1 1 320px; max-width: 100%;">
+        <div style="width: 100%; overflow: hidden; background: #000000; border-radius: 4px; border: 1px solid #cdcdcd; aspect-ratio: ${aspectRatio};">
+            <iframe 
+                class="${iframeClass}" 
+                style="width: 100%; height: 100%; border: none; display: block;" 
+                title="${iframeTitle}" 
+                src="${linkData.src}" 
+                loading="lazy" 
+                allowfullscreen="allowfullscreen" 
+                allow="${iframeAllow}" 
+                aria-label="${ariaLabel}">
+            </iframe>
+        </div>
+        <p style="text-align: center; margin-top: 12px; margin-bottom: 0;">Source: <a class="inline_disabled" href="${linkData.permalink}" data-api-retarget="false" target="_blank" rel="noopener">${title}</a> (${source}, ${year})</p>
+    </div>`;
+    }
+
+    function generateSideBySide() {
+        const outputDiv = document.getElementById('outputCode');
+        const copyBtn = document.getElementById('copyButton');
+        const mediaType = document.querySelector('input[name="mediaType"]:checked').value;
+        
+        outputDiv.classList.remove('error-text');
+        copyBtn.style.display = 'none';
+
+        // Get V1 Data
+        const v1Title = document.getElementById('v1Title').value.trim();
+        const v1Source = document.getElementById('v1Source').value.trim();
+        const v1Year = document.getElementById('v1Year').value.trim();
+        const v1Embed = document.getElementById('v1Embed').value.trim();
+        
+        // Get V2 Data
+        const v2Title = document.getElementById('v2Title').value.trim();
+        const v2Source = document.getElementById('v2Source').value.trim();
+        const v2Year = document.getElementById('v2Year').value.trim();
+        const v2Embed = document.getElementById('v2Embed').value.trim();
+
+        if (!v1Title || !v1Source || !v1Year || !v1Embed || !v2Title || !v2Source || !v2Year || !v2Embed) {
+            outputDiv.textContent = 'Error: Please ensure all fields for BOTH videos are filled out.';
+            outputDiv.classList.add('error-text');
+            return;
+        }
+
+        const link1 = processInput(v1Embed, mediaType);
+        const link2 = processInput(v2Embed, mediaType);
+
+        if (!link1 || !link2) {
+            outputDiv.textContent = 'Error: Could not extract valid URLs from one or both of the inputs.';
+            outputDiv.classList.add('error-text');
+            return;
+        }
+        if (link1 === "public_error" || link2 === "public_error") {
+            outputDiv.textContent = 'Error: Echo LTI must be used, not a public link.';
+            outputDiv.classList.add('error-text');
+            return;
+        }
+
+        const v1Html = buildVideoBlock(v1Title, v1Source, v1Year, link1, mediaType);
+        const v2Html = buildVideoBlock(v2Title, v2Source, v2Year, link2, mediaType);
+
+        const finalHtml = 
+`<div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; width: 100%; margin: 0 auto;">${v1Html}${v2Html}
+</div>`;
+
+        outputDiv.textContent = finalHtml;
+        copyBtn.style.display = 'block'; 
+    }
+
+    function copyCode() {
+        const code = document.getElementById('outputCode').textContent;
+        const btn = document.getElementById('copyButton');
+        if (!code || document.getElementById('outputCode').classList.contains('error-text')) return;
+
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(code).then(() => showSuccess(btn)).catch(() => fallbackCopy(code, btn));
+        } else {
+            fallbackCopy(code, btn);
+        }
+    }
+
+    function fallbackCopy(text, btn) {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        document.body.appendChild(ta);
+        ta.focus(); ta.select();
+        try { document.execCommand('copy') ? showSuccess(btn) : alert('Manual copy required.'); } 
+        catch (e) { alert('Manual copy required.'); }
+        document.body.removeChild(ta);
+    }
+
+    function showSuccess(btn) {
+        btn.textContent = 'Copied Code Successfully!';
+        setTimeout(() => btn.textContent = 'Copy code to clipboard', 2000);
+    }
+
+    function resetGenerator() {
+        document.querySelectorAll('input[type="text"], textarea').forEach(el => el.value = '');
+        document.getElementById('outputCode').textContent = '';
+        document.getElementById('copyButton').style.display = 'none';
+        toggleMediaType();
+    }
+</script>
